@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Crates.API/Crates.API.csproj" />
+  <Project Path="Crates.AppHost/Crates.AppHost.csproj" />
+  <Project Path="Crates.Data/Crates.Data.csproj" />
+  <Project Path="Crates.Domain/Crates.Domain.csproj" />
+  <Project Path="Crates.ServiceDefaults/Crates.ServiceDefaults.csproj" />
+</Solution>
