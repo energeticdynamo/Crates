@@ -22,6 +22,18 @@ builder.Services.AddDbContext<CratesContext>(options =>
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    // Create a temporary scope to get the DbContext
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<CratesContext>();
+
+        // Run the seeder
+        DbInitializer.Initialize(context);
+    }
+}
+
 // 4. Configure the HTTP request pipeline
 app.MapDefaultEndpoints(); // Required for Aspire health checks
 
