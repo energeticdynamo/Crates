@@ -20,6 +20,13 @@ namespace Crates.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // NEW: Enable the pgvector extension and configure the vector column
+            modelBuilder.HasPostgresExtension("vector");
+
+            modelBuilder.Entity<Album>()
+                .Property(a => a.Vector)
+                .HasColumnType("vector(1536)"); // Assuming 1536 dimensions for the embedding
         }
     }
 }

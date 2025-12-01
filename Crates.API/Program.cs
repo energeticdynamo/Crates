@@ -1,6 +1,8 @@
 using Crates.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using Pgvector.EntityFrameworkCore;
+using Microsoft.SemanticKernel.Embeddings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,21 +24,24 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<CratesContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        // The Fix: Explicitly tell EF where the migrations live
-        b => b.MigrationsAssembly("Crates.Data")
+        b =>
+        {
+            b.MigrationsAssembly("Crates.Data");
+            b.UseVector();
+        }
     ));
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    // Create a temporary scope to get the DbContext
     using (var scope = app.Services.CreateScope())
     {
         var context = scope.ServiceProvider.GetRequiredService<CratesContext>();
 
-        // Run the seeder
-        DbInitializer.Initialize(context);
+        var embeddingService = scope.ServiceProvider.GetRequiredService<ITextEmbeddingGenerationService>();
+
+        await DbInitializer.InitializeAsync(context, embeddingService);
     }
 }
 

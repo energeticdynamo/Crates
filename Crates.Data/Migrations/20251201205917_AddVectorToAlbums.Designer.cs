@@ -3,6 +3,7 @@ using System;
 using Crates.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Pgvector;
@@ -12,9 +13,11 @@ using Pgvector;
 namespace Crates.Data.Migrations
 {
     [DbContext(typeof(CratesContext))]
-    partial class CratesContextModelSnapshot : ModelSnapshot
+    [Migration("20251201205917_AddVectorToAlbums")]
+    partial class AddVectorToAlbums
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

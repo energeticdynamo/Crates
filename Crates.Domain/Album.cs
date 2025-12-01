@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Pgvector;
 
 namespace Crates.Domain
 {
@@ -19,6 +15,7 @@ namespace Crates.Domain
         // Foreign Key for Artist (One-to-Many)
         public int ArtistId { get; set; }
         public Artist? Artist { get; set; }
+        public Vector? Vector { get; set; }
 
         // Many-to-Many Relationships
         // EF Core will automatically create the "AlbumGenres" and "AlbumTags" join tables for you
