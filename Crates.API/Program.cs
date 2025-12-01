@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using Pgvector.EntityFrameworkCore;
 using Microsoft.SemanticKernel.Embeddings;
+using Microsoft.SemanticKernel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,11 @@ builder.Services.AddControllers()
     });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddOpenAITextEmbeddingGeneration(
+    modelId: "text-embedding-3-small",
+    apiKey: builder.Configuration["OpenAI:ApiKey"]!
+    );
 
 // 3. REGISTER THE DATABASE CONTEXT
 // Aspire injects the connection string named "DefaultConnection" automatically.
