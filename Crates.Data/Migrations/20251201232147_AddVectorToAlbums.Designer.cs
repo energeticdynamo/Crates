@@ -13,7 +13,7 @@ using Pgvector;
 namespace Crates.Data.Migrations
 {
     [DbContext(typeof(CratesContext))]
-    [Migration("20251201205917_AddVectorToAlbums")]
+    [Migration("20251201232147_AddVectorToAlbums")]
     partial class AddVectorToAlbums
     {
         /// <inheritdoc />
@@ -88,7 +88,7 @@ namespace Crates.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<Vector>("Vector")
-                        .HasColumnType("vector(1536)");
+                        .HasColumnType("vector(384)");
 
                     b.HasKey("Id");
 

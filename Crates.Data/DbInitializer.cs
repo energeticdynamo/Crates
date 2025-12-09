@@ -1,5 +1,6 @@
 ﻿using Crates.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.AI;
 using Microsoft.SemanticKernel.Embeddings;
 using Pgvector; // Required for the Vector type
 
@@ -9,7 +10,7 @@ namespace Crates.Data
     {
         // 1. Changed to 'async Task' to handle the AI calls
         // 2. Added 'ITextEmbeddingGenerationService' parameter
-        public static async Task InitializeAsync(CratesContext context, ITextEmbeddingGenerationService embeddingService)
+        public static async Task InitializeAsync(CratesContext context, IEmbeddingGenerator<string, Embedding<float>> generator)
         {
             // Ensure the DB exists
             await context.Database.MigrateAsync();
@@ -74,12 +75,9 @@ namespace Crates.Data
             {
                 if (!string.IsNullOrEmpty(album.Description))
                 {
-                    // Call the AI service to turn text into numbers
-                    var embedding = await embeddingService.GenerateEmbeddingAsync(album.Description);
-
-                    // Save those numbers into the new Vector column
-                    // We use the Pgvector 'Vector' type here
-                    album.Vector = new Vector(embedding.ToArray());
+                    // New usage: GenerateAsync returns a list, we take the first one
+                    var result = await generator.GenerateAsync([album.Description]);
+                    album.Vector = new Pgvector.Vector(result[0].Vector);
                 }
             }
 

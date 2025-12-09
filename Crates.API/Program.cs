@@ -1,9 +1,12 @@
 using Crates.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
-using Pgvector.EntityFrameworkCore;
-using Microsoft.SemanticKernel.Embeddings;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Embeddings;
+using Microsoft.SemanticKernel.Connectors.Ollama;
+using Microsoft.Extensions.AI;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +23,10 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddOpenAITextEmbeddingGeneration(
-    modelId: "text-embedding-3-small",
-    apiKey: builder.Configuration["OpenAI:ApiKey"]!
-    );
+builder.Services.AddOllamaEmbeddingGenerator( // Note: New method name
+    modelId: "all-minilm",
+    endpoint: new Uri("http://localhost:11434")
+);
 
 // 3. REGISTER THE DATABASE CONTEXT
 // Aspire injects the connection string named "DefaultConnection" automatically.
@@ -45,9 +48,8 @@ if (app.Environment.IsDevelopment())
     {
         var context = scope.ServiceProvider.GetRequiredService<CratesContext>();
 
-        var embeddingService = scope.ServiceProvider.GetRequiredService<ITextEmbeddingGenerationService>();
-
-        await DbInitializer.InitializeAsync(context, embeddingService);
+        var generator = scope.ServiceProvider.GetRequiredService<IEmbeddingGenerator<string, Embedding<float>>>();
+        await DbInitializer.InitializeAsync(context, generator);
     }
 }
 

@@ -17,7 +17,7 @@ namespace Crates.Data.Migrations
             migrationBuilder.AddColumn<Vector>(
                 name: "Vector",
                 table: "Albums",
-                type: "vector(1536)",
+                type: "vector(384)",
                 nullable: true);
         }
 

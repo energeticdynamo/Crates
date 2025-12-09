@@ -26,7 +26,7 @@ namespace Crates.Data
 
             modelBuilder.Entity<Album>()
                 .Property(a => a.Vector)
-                .HasColumnType("vector(1536)"); // Assuming 1536 dimensions for the embedding
+                .HasColumnType("vector(384)"); // Assuming 1536 dimensions for the embedding
         }
     }
 }

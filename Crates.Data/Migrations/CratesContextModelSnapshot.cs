@@ -85,7 +85,7 @@ namespace Crates.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<Vector>("Vector")
-                        .HasColumnType("vector(1536)");
+                        .HasColumnType("vector(384)");
 
                     b.HasKey("Id");
 
